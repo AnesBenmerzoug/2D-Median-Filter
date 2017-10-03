@@ -6,7 +6,7 @@
 #include <systemc.h>
 #include <tlm.h>
 #include <tlm_utils/simple_target_socket.h>
-#include <image.h>
+#include "image.h"
 
 SC_MODULE(memory_module){
   // Inputs
@@ -30,13 +30,13 @@ SC_MODULE(memory_module){
   // Read/Write function
   virtual void b_transport(tlm::tlm_generic_payload& trans, sc_time& delay);
 
-  SC_CTOR(memory_module):socket("target socket"){
+  SC_CTOR(memory_module):target_socket("target_socket"){
     // Register callback for incoming b_transport method callback
     target_socket.register_b_transport(this, &memory_module::b_transport);
 
     SC_THREAD(do_memory);
     sensitive << clk.pos();
   }
-}
+};
 
 #endif

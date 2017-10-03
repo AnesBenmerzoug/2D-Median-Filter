@@ -1,21 +1,33 @@
-CC=g++
-CFLAGS=-Wall -std=c++0x
-LDFLAGS=-I/include -L$(SYSTEMC_LIB_DIR) -lsystemc
-TARGET=main
+SYSTEMC_HOME = /usr/local/systemc-2.3.1
+TARGET_ARCH = linux64
+SYSTEMC_INC_DIR = $(SYSTEMC_HOME)/include
+SYSTEMC_LIB_DIR = $(SYSTEMC_HOME)/lib-$(TARGET_ARCH)
 
-all: $(TARGET)
+EXE = main
+SRC_DIR = src
+OBJ_DIR = obj
+INC_DIR = include
 
-$(TARGET): main.o median_filter_module.o memory_module.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(TARGET) memory_module.o median_filter_module.o main.o
+SRC = $(wildcard $(SRC_DIR)/*.cpp)
+OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+INC = $(wildcard $(INC_DIR)/*.h)
 
-main.o: main.c median_filter_module.h memory_module.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -c main.c
+CPPFLAGS += -I$(INC_DIR) -I$(SYSTEMC_INC_DIR)
+CFLAGS += -Wall
+LDFLAGS += -L$(SYSTEMC_LIB_DIR) -pthread
+LDLIBS += -lsystemc -lm
 
-median_filter_module.o: median_filter_module.c median_filter_module.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -c median_filter_module.c
+CC = g++
 
-memory_module.o: memory_module.c memory_module.h
-	$(CC) $(CFLAGS) $(LDFLAGS) -c memory_module.c
+.PHONY: all clean
+
+all: $(EXE)
+
+$(EXE): $(OBJ) $(SYSTEMC_LIB_DIR)/libsystemc.a
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(INC)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o main Output.bmp *.cpp.*
+	rm -f $(OBJ) main Output.bmp *.cpp.*

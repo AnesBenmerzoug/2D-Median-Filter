@@ -28,11 +28,11 @@ SC_MODULE(median_filter_module){
   // Function to write pixel value to memory
   void write_pixel(unsigned char val, unsigned int x, unsigned int y);
 
-  SC_CTOR(median_filter_module):socket("initiator socket"){
+  SC_CTOR(median_filter_module):initiator_socket("initiator_socket"){
     SC_THREAD(do_median);
     sensitive << clk.pos();
   }
 
-}
+};
 
 #endif

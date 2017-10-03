@@ -3,7 +3,7 @@
 void memory_module::do_memory(){
   // Initialize memory with image content
   for(int j = 0; j < height; j++){
-    for(int i = 0; i < width, i++){
+    for(int i = 0; i < width; i++){
       mem[i+j*height] = IMAGE[i][j];
     }
   }
@@ -12,7 +12,7 @@ void memory_module::do_memory(){
     if(rst.read() == 1){
       // Initialize memory with image content
       for(int j = 0; j < height; j++){
-        for(int i = 0; i < width, i++){
+        for(int i = 0; i < width; i++){
           mem[i+j*height] = IMAGE[i][j];
         }
       }
@@ -21,7 +21,7 @@ void memory_module::do_memory(){
   }
 }
 
-virtual void memory_module::b_transport(tlm::generic_payload& trans, sc_time& delay){
+void memory_module::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay){
   tlm::tlm_command cmd = trans.get_command();
   sc_dt::uint64    adr = trans.get_address();
   unsigned char*   ptr = trans.get_data_ptr();
