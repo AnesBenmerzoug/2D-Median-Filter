@@ -17,9 +17,9 @@ SC_MODULE(memory_module){
   tlm_utils::simple_target_socket<memory_module> target_socket;
 
   // Image Dimensions
-  static const unsigned int width = 100;
-  static const unsigned int height = 100;
-  static const unsigned int size = width*height;
+  static const int width = 100;
+  static const int height = 100;
+  static const int size = width*height;
 
   // Actual Memory Array
   unsigned char mem[size];
@@ -36,6 +36,7 @@ SC_MODULE(memory_module){
 
     SC_THREAD(do_memory);
     sensitive << clk.pos();
+    reset_signal_is(rst, true);
   }
 };
 

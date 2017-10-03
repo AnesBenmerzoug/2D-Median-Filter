@@ -12,12 +12,18 @@ SC_MODULE(median_filter_module){
   sc_in<bool> clk;
   sc_in<bool> rst;
 
+  // Outputs
+  sc_out<bool> finish;
+
   // TLM 2.0 Socket that serves as interface to the Memory Module
   tlm_utils::simple_initiator_socket<median_filter_module> initiator_socket;
 
   // Image Dimensions
-  static const unsigned int width = 100;
-  static const unsigned int height = 100;
+  static const int width = 100;
+  static const int height = 100;
+
+  // Temporary array to store read pixels
+  unsigned char temp[9];
 
   // Main function of the median filter module
   void do_median();
@@ -31,6 +37,7 @@ SC_MODULE(median_filter_module){
   SC_CTOR(median_filter_module):initiator_socket("initiator_socket"){
     SC_THREAD(do_median);
     sensitive << clk.pos();
+    reset_signal_is(rst, true);
   }
 
 };
