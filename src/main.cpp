@@ -11,6 +11,8 @@ int sc_main(int argc, char* argv[]){
 
   median_filter->initiator_socket.bind(memory->target_socket);
 
+  testbench->initiator_socket.bind(memory->target_socket_tb);
+
   // The system clock
   sc_clock Clk("Clock", 10, SC_NS, 0.5, 10, SC_NS);
 

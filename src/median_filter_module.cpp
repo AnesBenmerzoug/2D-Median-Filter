@@ -2,8 +2,8 @@
 
 void median_filter_module::do_median(){
 
-  for(int j = 1; j < height-1; j++){
-    for(int i = 1; i < width-1; i++){
+  for(int i = 1; i < width-1; i++){
+    for(int j = 1; j < height-1; j++){
 
       temp[0] = read_pixel(i-1, j-1);
       temp[1] = read_pixel(i-1, j);

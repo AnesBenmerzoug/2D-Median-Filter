@@ -13,8 +13,9 @@ SC_MODULE(memory_module){
   sc_in<bool> clk;
   sc_in<bool> rst;
 
-  // TLM 2.0 Socket that serves as interface to the Median Filter Module
+  // TLM 2.0 Socket that serves as interface to the Median Filter Module and to the Median Filter Testbench
   tlm_utils::simple_target_socket<memory_module> target_socket;
+  tlm_utils::simple_target_socket<memory_module> target_socket_tb;
 
   // Image Dimensions
   static const int width = 100;
@@ -30,9 +31,13 @@ SC_MODULE(memory_module){
   // Read/Write function
   virtual void b_transport(tlm::tlm_generic_payload& trans, sc_time& delay);
 
+  // Read/Write function for the Testbench
+  virtual void b_transport_tb(tlm::tlm_generic_payload& trans, sc_time& delay);
+
   SC_CTOR(memory_module):target_socket("target_socket"){
     // Register callback for incoming b_transport method callback
     target_socket.register_b_transport(this, &memory_module::b_transport);
+    target_socket_tb.register_b_transport(this, &memory_module::b_transport_tb);
 
     SC_THREAD(do_memory);
     sensitive << clk.pos();
