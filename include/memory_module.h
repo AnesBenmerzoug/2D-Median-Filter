@@ -32,12 +32,12 @@ SC_MODULE(memory_module){
   virtual void b_transport(tlm::tlm_generic_payload& trans, sc_time& delay);
 
   // Read/Write function for the Testbench
-  virtual void b_transport_tb(tlm::tlm_generic_payload& trans, sc_time& delay);
+  virtual unsigned int transport_dbg(tlm::tlm_generic_payload& trans);
 
   SC_CTOR(memory_module):target_socket("target_socket"){
     // Register callback for incoming b_transport method callback
     target_socket.register_b_transport(this, &memory_module::b_transport);
-    target_socket_tb.register_b_transport(this, &memory_module::b_transport_tb);
+    target_socket_tb.register_transport_dbg(this, &memory_module::transport_dbg);
 
     SC_THREAD(do_memory);
     sensitive << clk.pos();

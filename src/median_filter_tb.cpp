@@ -35,7 +35,7 @@ void median_filter_tb::do_testbench(){
       }
   }
 
-  image_out.WriteToFile("output.bmp");
+  image_out.WriteToFile("img/output.bmp");
 
   sc_stop();
 }
@@ -47,8 +47,8 @@ void median_filter_tb::read_image(unsigned char img[][height]){
 
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
-      trans->set_address(i*height + j);  // address set to positon of pixel column
-      trans->set_data_ptr( &(img[i][j]) );  // copy directly into img array, switched coords
+      trans->set_address(i*width+j);  // address set to positon of pixel column
+      trans->set_data_ptr(&(img[j][i]));  // copy directly into img array, switched coords
       initiator_socket->transport_dbg(*trans);
     }
   }

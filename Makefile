@@ -7,6 +7,7 @@ EXE = main
 SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = include
+IMG_DIR = img
 EASYBMP_DIR = EasyBMP
 
 SRC = $(wildcard $(SRC_DIR)/*.cpp)
@@ -35,4 +36,4 @@ $(OBJ_DIR)/%.o: $(EASYBMP_DIR)/%.cpp
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(OBJ)
+	rm $(OBJ) $(EXE) $(IMG_DIR)/output.bmp

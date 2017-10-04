@@ -2,6 +2,8 @@
 
 void median_filter_module::do_median(){
 
+  unsigned char filtered_img[width][height];
+
   for(int i = 1; i < width-1; i++){
     for(int j = 1; j < height-1; j++){
 
@@ -25,9 +27,13 @@ void median_filter_module::do_median(){
         }
         temp[l+1] = var;
       }
-
-      write_pixel(temp[4], i, j);
+      filtered_img[i][j] = temp[4];
       wait();
+    }
+  }
+  for(int i = 0; i < width; i++){
+    for(int j = 0; j < height; j++){
+      write_pixel(filtered_img[i][j], i, j);
     }
   }
   finish.write(true);
@@ -37,10 +43,10 @@ void median_filter_module::do_median(){
 unsigned char median_filter_module::read_pixel(unsigned int x, unsigned int y){
   tlm::tlm_generic_payload* trans = new tlm::tlm_generic_payload;
   sc_time delay = sc_time(10, SC_NS);
-  unsigned char data = 0;
 
+  unsigned char data = 255;
   trans->set_command(tlm::TLM_READ_COMMAND);
-  trans->set_address(x+y*height);
+  trans->set_address(x*width+y);
   trans->set_data_ptr(&data);
   trans->set_data_length(1);
   trans->set_streaming_width(1);
@@ -50,20 +56,25 @@ unsigned char median_filter_module::read_pixel(unsigned int x, unsigned int y){
 
   initiator_socket->b_transport(*trans, delay);
 
+  //cout << "data read from address: " << x << ", " << y << " is " << int(data) << "\n";
+
   return data;
 }
 
 void median_filter_module::write_pixel(unsigned char val, unsigned int x, unsigned int y){
   tlm::tlm_generic_payload* trans = new tlm::tlm_generic_payload;
   sc_time delay = sc_time(10, SC_NS);
+
   trans->set_command(tlm::TLM_WRITE_COMMAND);
-  trans->set_address(x+y*height);
+  trans->set_address(x*width+y);
   trans->set_data_ptr(&val);
   trans->set_data_length(1);
   trans->set_streaming_width(1);
   trans->set_byte_enable_ptr(0);
   trans->set_dmi_allowed(false);
   trans->set_response_status(tlm::TLM_INCOMPLETE_RESPONSE);
+
+  //cout << "data written to address: " << x << ", " << y << " is " << int(val) << "\n";
 
   initiator_socket->b_transport(*trans, delay);
 }
