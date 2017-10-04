@@ -1,12 +1,6 @@
 #include "../include/memory_module.h"
 
 void memory_module::do_memory(){
-  // Initialize memory with image content
-  for(int i = 0; i < width; i++){
-    for(int j = 0; j < height; j++){
-      mem[i*width+j] = IMAGE[i][j];
-    }
-  }
   wait();
 }
 
@@ -49,7 +43,7 @@ unsigned int memory_module::transport_dbg(tlm::tlm_generic_payload& trans){
     memcpy(ptr, &mem[adr], num_bytes);
   }
   else if(cmd == tlm::TLM_WRITE_COMMAND){
-    SC_REPORT_ERROR("TLM-2", "Target does not allow writing through b_transport_tb");
+    memcpy(&mem[adr], ptr, num_bytes);
   }
 
   return num_bytes;

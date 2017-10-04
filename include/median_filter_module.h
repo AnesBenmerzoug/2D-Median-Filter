@@ -12,7 +12,8 @@ SC_MODULE(median_filter_module){
   sc_in<bool> clk;
   sc_in<bool> rst;
 
-  // Outputs
+  // Interface signals with the testbench
+  sc_in<bool> start;
   sc_out<bool> finish;
 
   // TLM 2.0 Socket that serves as interface to the Memory Module

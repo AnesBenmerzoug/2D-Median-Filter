@@ -6,7 +6,6 @@
 #include <systemc.h>
 #include <tlm.h>
 #include <tlm_utils/simple_target_socket.h>
-#include "image.h"
 
 SC_MODULE(memory_module){
   // Inputs

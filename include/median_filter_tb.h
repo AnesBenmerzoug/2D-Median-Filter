@@ -30,6 +30,9 @@ SC_MODULE(median_filter_tb){
   // Function used to read image from memory
   void read_image(unsigned char img[][height]);
 
+  // Function used to write image to memory
+  void write_image(unsigned char img[][height]);
+
   SC_CTOR(median_filter_tb):initiator_socket("initiator_socket_tb"){
     SC_THREAD(do_testbench);
     sensitive << clk.pos();

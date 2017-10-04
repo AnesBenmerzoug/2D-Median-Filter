@@ -25,6 +25,7 @@ int sc_main(int argc, char* argv[]){
 
   median_filter->clk(Clk);
   median_filter->rst(Rst);
+  median_filter->start(Start);
   median_filter->finish(Finish);
 
   memory->clk(Clk);
