@@ -25,6 +25,7 @@ SC_MODULE(median_filter_module){
 
   // Temporary array to store read pixels
   unsigned char temp[9];
+  unsigned char temp_sort[9];
 
   // Main function of the median filter module
   void do_median();

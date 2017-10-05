@@ -6,28 +6,46 @@ void median_filter_module::do_median(){
 
   for(int i = 1; i < width-1; i++){
     for(int j = 1; j < height-1; j++){
-
-      temp[0] = read_pixel(i-1, j-1);
-      temp[1] = read_pixel(i-1, j);
-      temp[2] = read_pixel(i-1, j+1);
-      temp[3] = read_pixel(i, j-1);
-      temp[4] = read_pixel(i, j);
-      temp[5] = read_pixel(i, j+1);
-      temp[6] = read_pixel(i+1, j-1);
-      temp[7] = read_pixel(i+1, j);
-      temp[8] = read_pixel(i+1, j+1);
+      if(j == 1){
+        temp[0] = read_pixel(i-1,j-1);
+        temp[1] = read_pixel(i-1,j);
+        temp[2] = read_pixel(i-1,j+1);
+        temp[3] = read_pixel(i,j-1);
+        temp[4] = read_pixel(i,j);
+        temp[5] = read_pixel(i,j+1);
+        temp[6] = read_pixel(i+1,j-1);
+        temp[7] = read_pixel(i+1,j);
+        temp[8] = read_pixel(i+1,j+1);
+      }
+      else{
+        temp[0] = temp[1];
+        temp[1] = temp[2];
+        temp[2] = read_pixel(i-1,j+1);
+        temp[3] = temp[4];
+        temp[4] = temp[5];
+        temp[5] = read_pixel(i,j+1);
+        temp[6] = temp[7];
+        temp[7] = temp[8];
+        temp[8] = read_pixel(i+1,j+1);
+      }
       wait();
 
-      for(int k = 1; k < 9; k++){
-        int l = k-1;
-        unsigned char var = temp[k];
-        while((l > 0) & (var < temp[l])){
-          temp[l+1] = temp[l];
-          l--;
+      std::copy(temp, temp+9, temp_sort);
+
+      int index;
+      unsigned char val;
+
+      for(int k = 0; k < 5; k++){
+        index = k;
+        for(int l = k+1; l < 9; l++){
+          if(temp_sort[l] < temp_sort[index])
+            index = l;
         }
-        temp[l+1] = var;
+        val = temp_sort[k];
+        temp_sort[k] = temp_sort[index];
+        temp_sort[index] = val;
       }
-      filtered_img[i][j] = temp[4];
+      filtered_img[i][j] = temp_sort[4];
       wait();
     }
   }
@@ -58,6 +76,8 @@ unsigned char median_filter_module::read_pixel(unsigned int x, unsigned int y){
 
   //cout << "data read from address: " << x << ", " << y << " is " << int(data) << "\n";
 
+  wait(delay);
+
   return data;
 }
 
@@ -77,4 +97,6 @@ void median_filter_module::write_pixel(unsigned char val, unsigned int x, unsign
   //cout << "data written to address: " << x << ", " << y << " is " << int(val) << "\n";
 
   initiator_socket->b_transport(*trans, delay);
+
+  wait(delay);
 }

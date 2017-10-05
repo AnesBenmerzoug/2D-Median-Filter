@@ -4,7 +4,6 @@
 #include "../include/median_filter_tb.h"
 
 int sc_main(int argc, char* argv[]){
-
   median_filter_module* median_filter = new median_filter_module("median_filter");
   memory_module* memory = new memory_module("memory");
   median_filter_tb* testbench = new median_filter_tb("median_filter_testbench");
