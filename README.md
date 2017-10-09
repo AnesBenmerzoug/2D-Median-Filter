@@ -1,6 +1,6 @@
 # 2D-Median-Filter
 
-A SystemC model of a 2D Median Filter.
+A SystemC model of a 2D Median Filter made as an assignment for the course FPGA-Based Hardware Accelerators and Hybrid Systems taken at the Technishe Universität Kaiserslautern.
 
 ### Prerequisites
 
